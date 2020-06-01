@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pagination</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <!-- Intro and Header -->
+    <header class="bookIntro">
+      <h1 class="display-5">Book Library Index</h1>
+      <p class="lead">
+        Implementing a simple dynamic pagination functionality for books.
+      </p>
+    </header>
+
+    <!-- Switching in between pages -->
+    <button type="button" id="prevPageButton" class="btn btn-secondary">&lt;</button>
+    <span id="pageButtons"></span>
+    <button type="button" id="nextPageButton" class="btn btn-secondary">&gt;</button>
+
+    <!-- Call the table headings -->
+    <table class="table">
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Title</th>
+        <th scope="col">Author</th>
+      </tr>
+      <tbody></tbody>
+    </table>
+
+    <!-- Calling Javascript function -->
+    <script src="data.js" type="module"></script>
+    <script src="functions.js" type="module"></script>
+  </body>
+</html>
