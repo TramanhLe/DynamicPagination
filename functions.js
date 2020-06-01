@@ -23,23 +23,35 @@ const data =
   { id: 19, title: "Of Mice and Men", author: "John Steinbeck" },
   { id: 20, title: "Adventures of Tom Sawyer, The", author: "Mark Twain" },
 ];
-(() => {
+//(() => {
   const booksPerPage = 6; // Number of rows in a page
   const numberOfPages = Math.ceil(data.length / booksPerPage); 
   const lastPage = numberOfPages - 1;
   let currentPage = 0;
   let buttons = []; // associative array to get button by number
   const getTableElement = () => document.getElementsByTagName("table")[0];
-  const insertTableRow = (id = 0, title = "", author = "") => 
+  const rowInsert = (id = 0, title = "", author = "") => 
   {
-    const table = getTableElement();
+    /*const table = getTableElement();
     const row = table.insertRow();
     const idCell = row.insertCell(0);
     const titleCell = row.insertCell(1);
     const authorCell = row.insertCell(2);
     idCell.innerHTML = id;
     titleCell.innerHTML = title;
+    authorCell.innerHTML = author; */
+
+    let idCell = document.createElement("td");
+    idCell.innerHTML = id;
+    let titleCell = document.createElement("td");
+    titleCell.innerHTML = title;
+    let authorCell = document.createElement("td");
     authorCell.innerHTML = author;
+    let tblRow = document.createElement("tr");
+    tblRow.appendChild(idCell);
+    tblRow.appendChild(titleCell);
+    tblRow.appendChild(authorCell);
+    bkTable.appendChild(tblRow);
   };
   const getBooksForPage = () => // Setting up the books in the page
   {
@@ -49,7 +61,7 @@ const data =
   const insertAllRows = () => // Setting the books into a table
   {
     const books = getBooksForPage();
-    books.forEach(book => insertTableRow(book.id, book.title, book.author));
+    books.forEach(book => rowInsert(book.id, book.title, book.author));
   };
   // Setting the button element 
   const activateButton = () => {
@@ -62,14 +74,19 @@ const data =
     buttonElement.classList.remove("active");
     buttonElement.setAttribute("aria-pressed", "false");
   };
+  const clearRows = () => {
+      document.getElementById("tbody").innerHTML="";
+  }
 
   const goToPage = (pageIndex = 0) => 
   {
-    deactivateButton(buttons[currentPage]);
-    activateButton(buttons[pageIndex]);
-    currentPage = pageIndex;
+    console.log("Hello");
     clearRows();
-    insertAllRows();
+    //deactivateButton(buttons[currentPage]);
+    //activateButton(buttons[pageIndex]);
+    //currentPage = pageIndex;
+    
+    //insertAllRows();
   };
   const changePage = (num = 0) => 
   {
@@ -106,4 +123,4 @@ const data =
     addClickListener("prevPageButton", previousPage);
     insertAllRows();
   });
-})();
+//})();
