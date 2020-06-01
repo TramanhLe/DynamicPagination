@@ -1,5 +1,5 @@
 "use strict";
-// import data from "./data.js";
+
 const data = 
 [
   { id: 1, title: "Pride and Prejudice", author: "Jane Austen"},
@@ -23,24 +23,16 @@ const data =
   { id: 19, title: "Of Mice and Men", author: "John Steinbeck" },
   { id: 20, title: "Adventures of Tom Sawyer, The", author: "Mark Twain" },
 ];
-//(() => {
-  const booksPerPage = 6; // Number of rows in a page
-  const numberOfPages = Math.ceil(data.length / booksPerPage); 
-  const lastPage = numberOfPages - 1;
-  let currentPage = 0;
-  let buttons = []; // associative array to get button by number
-  const getTableElement = () => document.getElementsByTagName("table")[0];
-  const rowInsert = (id = 0, title = "", author = "") => 
-  {
-    /*const table = getTableElement();
-    const row = table.insertRow();
-    const idCell = row.insertCell(0);
-    const titleCell = row.insertCell(1);
-    const authorCell = row.insertCell(2);
-    idCell.innerHTML = id;
-    titleCell.innerHTML = title;
-    authorCell.innerHTML = author; */
 
+const booksPerPage = 6; // Number of rows in a page
+const numberOfPages = Math.ceil(data.length / booksPerPage); 
+const lastPage = numberOfPages - 1;
+let currentPage = 1;
+let buttons = []; // Empty array for increment book number
+const getTableElement = () => document.getElementsByTagName("table")[0];
+
+const rowInsert = (id = 0, title = "", author = "") => 
+{   // Append the ID, title, and author to proper cells
     let idCell = document.createElement("td");
     idCell.innerHTML = id;
     let titleCell = document.createElement("td");
@@ -51,47 +43,46 @@ const data =
     tblRow.appendChild(idCell);
     tblRow.appendChild(titleCell);
     tblRow.appendChild(authorCell);
-    bkTable.appendChild(tblRow);
-  };
-  const getBooksForPage = () => // Setting up the books in the page
-  {
-    const firstBookInPage = currentPage * booksPerPage;
+    document.getElementById("tbody").appendChild(tblRow);
+};
+const getBooksForPage = () => // Setting up the books in the page
+{
+    const firstBookInPage = (currentPage - 1) * booksPerPage;
     return data.slice(firstBookInPage, firstBookInPage + booksPerPage);
-  };
-  const insertAllRows = () => // Setting the books into a table
-  {
+};
+const insertAllRows = () => // Setting the books into a table
+{
     const books = getBooksForPage();
     books.forEach(book => rowInsert(book.id, book.title, book.author));
-  };
+};
   // Setting the button element 
-  const activateButton = () => {
+const activateButton = () => {
     let buttonElement = document.createElement('button');
     buttonElement.classList.add("active");
     buttonElement.setAttribute("aria-pressed", "true");
-  };
-  const deactivateButton = () => {
+};
+const deactivateButton = () => {
     let buttonElement = document.createElement('button');
     buttonElement.classList.remove("active");
     buttonElement.setAttribute("aria-pressed", "false");
-  };
-  const clearRows = () => {
+};
+const clearRows = () => {
       document.getElementById("tbody").innerHTML="";
-  }
+}
 
-  const goToPage = (pageIndex = 0) => 
-  {
-    console.log("Hello");
+const goToPage = (pageIndex = 0) => 
+{   // Rendering the actual page on click
+    deactivateButton(buttons[currentPage]);
+    activateButton(buttons[pageIndex]);
+    currentPage = pageIndex;
     clearRows();
-    //deactivateButton(buttons[currentPage]);
-    //activateButton(buttons[pageIndex]);
-    //currentPage = pageIndex;
-    
-    //insertAllRows();
-  };
-  const changePage = (num = 0) => 
-  {
+    insertAllRows();
+};
+
+const changePage = (num = 0) => 
+{   // Condition the syntax of changing pages
     const nextPage = currentPage + num;
-    if (nextPage < 0) {
+    if (nextPage < 1) {
       console.log("This is the first page.")  
     }
     else if (nextPage > lastPage) 
@@ -100,27 +91,28 @@ const data =
     } else {
       goToPage(nextPage);
     }
-  };
-  const nextPage = () => changePage(1);
-  const previousPage = () => changePage(-1);
-  const addClickListener = (id = "", callback = () => undefined) =>
+};
+const nextPage = () => changePage(1);
+const previousPage = () => changePage(-1);
+
+const addClickListener = (id = "", callback = () => undefined) =>
     document.getElementById(id).addEventListener("click", callback);
-  const addPageButtons = () => {
+
+const addPageButtons = () => { // Display the actual page numbers
     const pageSpan = document.getElementById("pageButtons");
     for (let page = 1; page <= numberOfPages; page++) {
-      let button = document.createElement("button");
+      let button = document.createElement("button"); // Call the button
       button.innerHTML = page;
       button.className = "btn btn-primary";
       button.addEventListener("click", () => goToPage(page));
       pageSpan.appendChild(button);
-      buttons[page] = button; // add to hashmap for reference 
+      buttons[page] = button; // Map the entities to the array
     }
     activateButton(buttons[0]);
-  };
-  document.addEventListener("DOMContentLoaded", () => {
+};
+document.addEventListener("DOMContentLoaded", () => {
     addPageButtons();
     addClickListener("nextPageButton", nextPage);
     addClickListener("prevPageButton", previousPage);
     insertAllRows();
-  });
-//})();
+});
